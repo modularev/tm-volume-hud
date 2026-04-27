@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSUIElement</key>
+	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>/project_fonts/Michroma/Michroma-Regular.ttf</string>
+		<string>/project_fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf</string>
+	</array>
+</dict>
+</plist>
