@@ -1,0 +1,34 @@
+name: macOS Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build macOS (arm64)
+      run: |
+        xcodebuild build \
+          -project TM-OSC-HUD.xcodeproj \
+          -scheme TM-OSC-HUD \
+          -destination 'platform=macOS' \
+          -derivedDataPath build_arm \
+          CODE_SIGNING_ALLOWED=NO
+        
+        cd build_arm/Build/Products/Debug        
+        zip -r TM-OSC-HUD-macOS.zip TM-OSC-HUD.app
+        
+        mv TM-OSC-HUD-macOS.zip ../../../..
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TM-OSC-HUD-macOS
+        path: TM-OSC-HUD-macOS.zip

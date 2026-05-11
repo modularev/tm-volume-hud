@@ -2,30 +2,46 @@
 
 ## Overview
 
-A macOS utility that provides a heads-up display (HUD) for RME TotalMix main volume. It is designed to provide visual feedback when using hardware controllers, such as the RME ARC USB, to adjust volume.
+TM-OSC-HUD is a small macOS utility that shows an on-screen volume HUD compatible with RME TotalMix when the main volume changes.
+
+It is useful when using external controllers like the RME ARC USB and TotalMix is running in the background, to get a visual on the current volume.
 
 ## Configuration
 
-The application acts as an OSC server and listens for volume data on a specific port and address.
+TM-OSC-HUD runs as a local OSC receiver.
 
-* **Default Port**: 9001
-* **Default Address**: /1/mastervolumeVal
+**Default Port:** `9001`  
+**Default Address:** `/1/mastervolumeVal`
 
-## Installation and Setup
+## Installation
 
-1. Open TotalMix and in the toolbar select Options -> Mixer Settings... and go to the OSC tab
-2. Set the Remote Controller Address Host to 127.0.0.1 and the outgoing Port to 9001 (or whatever you'd like).
-4. Enable OSC Control from the Options toolbar.
-5. Launch TM-OSC-HUD; the HUD will appear automatically when the Main Volume is changed.
+1. Open the [Actions](https://github.com/modularev/tm-volume-hud/actions) tab.
+2. Open the latest successful workflow run.
+3. Download **TM-OSC-HUD-macOS.zip** from the **Artifacts** section.
+4. Unzip the file.
+5. Move **TM-OSC-HUD.app** to `/Applications`
+6. Open Terminal and run:
 
-<div class="grid" style="display:grid; grid-template-columns:repeat(2,1fr);">
+```bash
+xattr -cr /Applications/TM-OSC-HUD.app
+```
 
-![pro](img/pro.png)
+**Security note**: As TM-OSC-HUD is currently unsigned, the command above removes the macOS quarantine flag.
 
-![classic](img/classic.png)
+## Setup
 
-![dark](img/dark.png)
+1. Open TotalMix.
+2. Go to **Options > Mixer Settings...**
+3. Open the **OSC** tab.
+4. Set the Host **Remote Controller Address** to `127.0.0.1`
+5. Set the **Port (outgoing)** to `9001` (or your custom port)
+6. Go to **Options** and **Enable OSC Control**.
+7. Launch **TM-OSC-HUD**
 
-![light](img/light.png)
+The HUD will appear automatically when the main volume changes.
 
-</div>
+
+| Styles                |                             |
+| --------------------- | --------------------------- |
+| ![pro](img/pro.png)   | ![classic](img/classic.png) |
+| ![dark](img/dark.png) | ![light](img/light.png)     |
