@@ -3,6 +3,7 @@ import Combine
 import OSCKit
 import ServiceManagement
 import CoreText
+import OSLog
 
 enum DefaultsKeys {
     static let theme = "selected_Theme"
@@ -93,7 +94,9 @@ struct TMOSCHUDApp: App {
     }
 }
 
-enum FontRegistrar {
+private enum FontRegistrar {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "TM-OSC-HUD", category: "Fonts")
+    
     static func registerBundledFonts() {
         guard let projectFontsURL = Bundle.main.resourceURL?.appendingPathComponent("project_fonts"),
               let fileEnumerator = FileManager.default.enumerator(
@@ -107,7 +110,7 @@ enum FontRegistrar {
             var error: Unmanaged<CFError>?
             let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error)
             if !didRegister, let registrationError = error?.takeRetainedValue() {
-                print("Font registration failed for \(fileURL.lastPathComponent): \(registrationError)")
+                logger.error("Font registration failed for \(fileURL.lastPathComponent, privacy: .public): \(registrationError.localizedDescription, privacy: .public)")
             }
         }
     }
