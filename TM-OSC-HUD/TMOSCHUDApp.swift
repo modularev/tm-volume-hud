@@ -96,6 +96,7 @@ struct TMOSCHUDApp: App {
 
 private enum FontRegistrar {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "TM-OSC-HUD", category: "Fonts")
+    private static let supportedExtensions: Set<String> = ["ttf", "otf"]
     
     static func registerBundledFonts() {
         guard let projectFontsURL = Bundle.main.resourceURL?.appendingPathComponent("project_fonts") else {
@@ -113,7 +114,7 @@ private enum FontRegistrar {
         
         for case let fileURL as URL in fileEnumerator {
             let ext = fileURL.pathExtension.lowercased()
-            guard ext == "ttf" || ext == "otf" else { continue }
+            guard supportedExtensions.contains(ext) else { continue }
             var error: Unmanaged<CFError>?
             let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error)
             if !didRegister {
