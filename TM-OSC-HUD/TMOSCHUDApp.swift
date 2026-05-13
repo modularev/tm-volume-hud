@@ -98,11 +98,18 @@ private enum FontRegistrar {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "TM-OSC-HUD", category: "Fonts")
     
     static func registerBundledFonts() {
-        guard let projectFontsURL = Bundle.main.resourceURL?.appendingPathComponent("project_fonts"),
-              let fileEnumerator = FileManager.default.enumerator(
-                at: projectFontsURL,
-                includingPropertiesForKeys: nil
-              ) else { return }
+        guard let projectFontsURL = Bundle.main.resourceURL?.appendingPathComponent("project_fonts") else {
+            logger.warning("Bundle resource URL not available; skipping font registration.")
+            return
+        }
+        
+        guard let fileEnumerator = FileManager.default.enumerator(
+            at: projectFontsURL,
+            includingPropertiesForKeys: nil
+        ) else {
+            logger.warning("project_fonts directory missing or unreadable at \(projectFontsURL.path, privacy: .public).")
+            return
+        }
         
         for case let fileURL as URL in fileEnumerator {
             let ext = fileURL.pathExtension.lowercased()
@@ -111,6 +118,8 @@ private enum FontRegistrar {
             let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error)
             if !didRegister, let registrationError = error?.takeRetainedValue() {
                 logger.error("Font registration failed for \(fileURL.lastPathComponent, privacy: .public): \(registrationError.localizedDescription, privacy: .public)")
+            } else if didRegister {
+                logger.debug("Registered font: \(fileURL.lastPathComponent, privacy: .public)")
             }
         }
     }
