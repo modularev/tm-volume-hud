@@ -115,11 +115,13 @@ private enum FontRegistrar {
             let ext = fileURL.pathExtension.lowercased()
             guard ext == "ttf" || ext == "otf" else { continue }
             var error: Unmanaged<CFError>?
-            let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error) // Register only for current app runtime.
-            let registrationError = error?.takeRetainedValue()
-            if !didRegister, let registrationError {
-                logger.error("Font registration failed for \(fileURL.lastPathComponent, privacy: .public): \(registrationError.localizedDescription, privacy: .public)")
-            } else if didRegister {
+            let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error) // Registers fonts for the duration of this process.
+            if !didRegister {
+                if let registrationError = error?.takeRetainedValue() {
+                    logger.error("Font registration failed for \(fileURL.lastPathComponent, privacy: .public): \(registrationError.localizedDescription, privacy: .public)")
+                }
+            } else {
+                _ = error?.takeRetainedValue()
                 logger.debug("Registered font: \(fileURL.lastPathComponent, privacy: .public)")
             }
         }
