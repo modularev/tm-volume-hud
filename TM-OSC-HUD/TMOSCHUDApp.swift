@@ -95,16 +95,20 @@ struct TMOSCHUDApp: App {
 
 enum FontRegistrar {
     static func registerBundledFonts() {
-        guard let resourceURL = Bundle.main.resourceURL,
+        guard let projectFontsURL = Bundle.main.resourceURL?.appendingPathComponent("project_fonts"),
               let fileEnumerator = FileManager.default.enumerator(
-                at: resourceURL,
+                at: projectFontsURL,
                 includingPropertiesForKeys: nil
               ) else { return }
         
         for case let fileURL as URL in fileEnumerator {
             let ext = fileURL.pathExtension.lowercased()
             guard ext == "ttf" || ext == "otf" else { continue }
-            CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, nil)
+            var error: Unmanaged<CFError>?
+            let didRegister = CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, &error)
+            if !didRegister, let registrationError = error?.takeRetainedValue() {
+                print("Font registration failed for \(fileURL.lastPathComponent): \(registrationError)")
+            }
         }
     }
 }
