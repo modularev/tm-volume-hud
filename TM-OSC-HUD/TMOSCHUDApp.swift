@@ -2,6 +2,7 @@ import SwiftUI
 import Combine
 import OSCKit
 import ServiceManagement
+import CoreText
 
 enum DefaultsKeys {
     static let theme = "selected_Theme"
@@ -13,6 +14,10 @@ enum DefaultsKeys {
 @main
 struct TMOSCHUDApp: App {
     @StateObject private var oscManager = OSCManager()
+    
+    init() {
+        FontRegistrar.registerBundledFonts()
+    }
     
     @State private var isStartAtLoginEnabled: Bool = {
         if #available(macOS 13.0, *) {
@@ -84,6 +89,22 @@ struct TMOSCHUDApp: App {
             oscManager.updateAddress(input.stringValue)
         } else if response == .alertSecondButtonReturn {
             oscManager.updateAddress("/1/mastervolumeVal")
+        }
+    }
+}
+
+enum FontRegistrar {
+    static func registerBundledFonts() {
+        guard let resourceURL = Bundle.main.resourceURL,
+              let fileEnumerator = FileManager.default.enumerator(
+                at: resourceURL,
+                includingPropertiesForKeys: nil
+              ) else { return }
+        
+        for case let fileURL as URL in fileEnumerator {
+            let ext = fileURL.pathExtension.lowercased()
+            guard ext == "ttf" || ext == "otf" else { continue }
+            CTFontManagerRegisterFontsForURL(fileURL as CFURL, .process, nil)
         }
     }
 }
