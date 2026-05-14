@@ -15,16 +15,15 @@ TM-OSC-HUD runs as a local OSC receiver.
 
 ## Installation
 
-1. Open the [Actions](https://github.com/modularev/tm-volume-hud/actions) tab.
-2. Open the latest successful workflow run.
-3. Download **TM-OSC-HUD-macOS.zip** from the **Artifacts** section.
-4. Unzip the file.
-5. Move **TM-OSC-HUD.app** to `/Applications`
-6. Open Terminal and run:
+1. Download **TM-OSC-HUD-macOS.zip** from [here](https://nightly.link/modularev/tm-volume-hud/workflows/macos-build/main/TM-OSC-HUD-macOS.zip) or via GitHub [Actions](https://github.com/modularev/tm-volume-hud/actions) (from the Artifacts section)
+1. Unzip and move `TM-OSC-HUD.app` to `/Applications/`
+2. Run this command in **Terminal**:
 
 ```bash
 xattr -cr /Applications/TM-OSC-HUD.app
 ```
+
+4. Open the app from your Applications folder.
 
 **Security note**: As TM-OSC-HUD is currently unsigned, the command above removes the macOS quarantine flag.
 
