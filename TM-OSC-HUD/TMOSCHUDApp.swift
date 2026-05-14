@@ -21,6 +21,15 @@ struct TMOSCHUDApp: App {
         return false
     }()
     
+    init() {
+        let urls = ["Michroma-Regular", "ShareTechMono-Regular"]
+                    .compactMap { Bundle.main.url(forResource: $0, withExtension: "ttf") }
+                
+                CTFontManagerRegisterFontURLs(urls as CFArray, .process, true) { errors, _ in
+                    CFArrayGetCount(errors) > 0
+                }
+    }
+    
     var body: some Scene {
         MenuBarExtra(oscManager.lastDbString) {
             Toggle("Start at Login", isOn: Binding(
@@ -32,7 +41,7 @@ struct TMOSCHUDApp: App {
                     Text(theme.displayName).tag(theme)
                 }
             }
-            .pickerStyle(.inline) // Removes the extra submenu/label and shows items directly
+            .pickerStyle(.inline)
 
             Divider()
             Button("OSC Port: \(String(oscManager.oscPort))") { showPortChangeAlert() }

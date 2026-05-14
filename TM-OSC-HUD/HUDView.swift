@@ -107,7 +107,7 @@ struct SegmentedMeterView: View {
     private func getSegmentColor(index: Int) -> Color {
         let isActive = index < activeSegments
         let activeOpacity: Double = 1.0
-        let inactiveOpacity: Double = 0.12 // Slightly higher than 0.08 for better visibility on all themes
+        let inactiveOpacity: Double = 0.12
         
         let baseColor: Color
         
